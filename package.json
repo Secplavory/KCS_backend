@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Secplavory/KCS_backend/issues"
   },
-  "homepage": "https://github.com/Secplavory/KCS_backend#readme"
+  "homepage": "https://github.com/Secplavory/KCS_backend#readme",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
