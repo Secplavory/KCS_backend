@@ -51,7 +51,6 @@ const userController = {
         user.userHashCode = userHashCode
         delete user.id
         res.json(user)
-        console.log(usersHashPair)
         return;
     },
     loginByHash: async (req, res) => {
