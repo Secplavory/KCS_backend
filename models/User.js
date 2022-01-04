@@ -1,52 +1,81 @@
-const users = []
-let temp_id = 0
+const db = require('../db')
+const util = require("util")
+
 const userModel = {
-    getAllUser: () => {
-        return users;
-    },
-    registerUser: (phoneNumber, password, gender, userName, age) => {
-        temp_id += 1
-        for(var i=0;i<users.length;i++){
-            var user = users[i];
-            if(user.phoneNumber.localeCompare(phoneNumber)===0){
-                return {
-                    'status': "0010",
-                    'statusText': "phoneNumber already be used",
-                }
+    getAllUser: async () => {
+        const query = util.promisify(db.query).bind(db)
+        try{
+            const rows = await query("SELECT * FROM users")
+            return {
+                "status": "0000",
+                "statusText": "Succeed",
+                "users": rows
+            }    
+        }catch(err){
+            return {
+                "status": "0010",
+                "statusText": "DB error"
             }
         }
-        users.push({
-            "id": temp_id,
-            "phoneNumber": phoneNumber,
-            "password": password,
-            "gender": gender,
-            "name": userName,
-            "age": age
-        })
-        return {
-            'status': "0000",
-            'statusText': "registerUser succeed",
-        };
     },
-    loginUser: async (phoneNumber, password) => {
-        for(var i=0; i<users.length; i++){
-            var ele = users[i];
-            if(ele.phoneNumber.localeCompare(phoneNumber)===0){
-                if(ele.password.localeCompare(password)===0){
-                    return {
-                        status: "0000",
-                        statusText: "loginUser succeed",
-                    }
-                }
-                return {
-                    status: "0020",
-                    statusText: "loginUser failed",
-                }
+    registerUser: async (phoneNumber, cryptoPassword, gender, userName, birthDay) => {
+        const query = util.promisify(db.query).bind(db)
+        try{
+            const rows = await query("INSERT INTO users (phoneNumber, cryptoPassword, gender, name, birthDay)\
+            VALUE (?,?,?,?,?)", [phoneNumber, cryptoPassword, gender, userName, birthDay])
+            return {
+                "status": "0000",
+                "statusText": "Succeed",
+            }
+        }catch(err){
+            return {
+                "status": "0010",
+                "statusText": "DB error"
             }
         }
-        return {
-            status: "0020",
-            statusText: "loginUser failed",
+    },
+    loginUser: async (phoneNumber, cryptoPassword) => {
+        const query = util.promisify(db.query).bind(db)
+        try{
+            const rows = await query("SELECT * FROM users WHERE\
+            phoneNumber=? and cryptoPassword=?",[phoneNumber, cryptoPassword])
+            if(rows.length){
+                return {
+                    "id": rows[0].id,
+                    "status": "0000",
+                    "statusText": "Succeed"
+                }
+            }
+            return {
+                "status": "0010",
+                "statusText": "Incorrect phone number and password"
+            }
+    }catch(err){
+            return {
+                "status": "0010",
+                "statusText": "DB error"
+            }
+        }
+    },
+    getUserById: async (id) => {
+        const query = util.promisify(db.query).bind(db)
+        try{
+            const rows = await query("SELECT * FROM users WHERE id=?", [id])
+            if(rows.length){
+                return {
+                    "status": "0000",
+                    "statusText": "Succeed"
+                }
+            }
+            return {
+                "status": "0010",
+                "statusText": "userHash is not valid"
+            }
+        }catch(err){
+            return{
+                "status": "0010",
+                "statusText": "DB error"
+            }
         }
     }
 }
