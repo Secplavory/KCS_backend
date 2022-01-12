@@ -47,25 +47,35 @@ const userController = {
         }
         let user = await userModel.loginUser(phoneNumber, cryptoPassword)
         userHashCode = crypto.createHash('sha256').update(Math.floor(Math.random() * (999 - 1 + 1) + 1).toString()).digest('hex')
-        usersHashPair[userHashCode] = user.id
-        user.userHashCode = userHashCode
-        delete user.id
+        usersHashPair[user.phoneNumber] = userHashCode
+        if(user.status === "0000"){
+            user.userHashCode = userHashCode
+        }
+        delete user.phoneNumber
         res.json(user)
         return;
     },
     loginByHash: async (req, res) => {
-        let dataFromClient, userHashCode
+        let dataFromClient, phoneNumber, userHashCode
         try{
             dataFromClient = req.body
+            phoneNumber = dataFromClient.phoneNumber
             userHashCode = dataFromClient.userHashCode
         }catch(err){
-            return {
+            res.json({
                 "status": "9999",
                 "statusText": "post format not valid"
-            }
+            })
+            return
         }
-        let id = usersHashPair[userHashCode]
-        let resJson = await userModel.getUserById(id)
+        if(usersHashPair[phoneNumber] !== userHashCode){
+            res.json({
+                "status": "0010",
+                "statusText": "please login again"
+            })
+            return
+        }
+        let resJson = await userModel.getUserByPhoneNumber(phoneNumber)
         res.json(resJson)
     }
 }

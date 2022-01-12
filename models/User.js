@@ -41,7 +41,7 @@ const userModel = {
             phoneNumber=? and cryptoPassword=?",[phoneNumber, cryptoPassword])
             if(rows.length){
                 return {
-                    "id": rows[0].id,
+                    "phoneNumber": rows[0].phoneNumber,
                     "status": "0000",
                     "statusText": "Succeed"
                 }
@@ -57,19 +57,15 @@ const userModel = {
             }
         }
     },
-    getUserById: async (id) => {
+    getUserByPhoneNumber: async (phoneNumber) => {
         const query = util.promisify(db.query).bind(db)
         try{
-            const rows = await query("SELECT * FROM users WHERE id=?", [id])
+            const rows = await query("SELECT * FROM users WHERE phoneNumber=?", [phoneNumber])
             if(rows.length){
                 return {
                     "status": "0000",
                     "statusText": "Succeed"
                 }
-            }
-            return {
-                "status": "0010",
-                "statusText": "userHash is not valid"
             }
         }catch(err){
             return{
