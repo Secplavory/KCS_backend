@@ -23,6 +23,13 @@ app.get('/getHighPhosphorus', foodSuggestController.getHighPhosphorus);
 app.get('/getHighSalt', foodSuggestController.getHighSalt);
 app.get('/getSafe', foodSuggestController.getSafe);
 
+app.post('/setHighProtein', foodSuggestController.setHighProtein)
+app.post('/setLowProtein', foodSuggestController.setLowProtein)
+app.post('/setHighPotassium', foodSuggestController.setHighPotassium)
+app.post('/setHighPhosphorus', foodSuggestController.setHighPhosphorus)
+app.post('/setHighSalt', foodSuggestController.setHighSalt)
+app.post('/setSafe', foodSuggestController.setSafe)
+
 app.listen(port, ()=>{
     db.connect();
     console.log(`KCS backend listening at port: ${port}`);
