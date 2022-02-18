@@ -3,18 +3,25 @@ const db = require('./db');
 const cors = require('cors');
 
 const userController = require("./controllers/User");
+const foodSuggestController = require("./controllers/FoodSuggest")
+global.userHashPair = {}
 
 const port = 3000;
 const app = express();
 app.use(express.json());
 app.use(cors())
 
-
 app.get('/getAllUser', userController.getAllUser);
 app.post('/registerUser', userController.registerUser);
 app.post('/loginUser', userController.loginUser);
 app.post('/loginUserByHash', userController.loginByHash);
 
+app.get('/getHighProtein', foodSuggestController.getHighProtein);
+app.get('/getLowProtein', foodSuggestController.getLowProtein);
+app.get('/getHighPotassium', foodSuggestController.getHighPotassium);
+app.get('/getHighPhosphorus', foodSuggestController.getHighPhosphorus);
+app.get('/getHighSalt', foodSuggestController.getHighSalt);
+app.get('/getSafe', foodSuggestController.getSafe);
 
 app.listen(port, ()=>{
     db.connect();
