@@ -2,6 +2,22 @@ const db = require('../db')
 const util = require('util');
 
 const foodSuggestion = {
+    getAllSuggestion: async (id) => {
+        const query = util.promisify(db.query).bind(db)
+        try{
+            const rows = await query("SELECT title, suggest FROM foodsuggestion")
+            return {
+                status: "0000",
+                statusText: "Succeed",
+                data: rows
+            }
+        }catch(err){
+            return {
+                status: "0010",
+                statusText: "DB error"
+            }
+        }
+    },
     getSuggestion: async (id) => {
         const query = util.promisify(db.query).bind(db)
         try{
@@ -36,7 +52,7 @@ const foodSuggestion = {
                 statusText: "DB error",
             }
         }
-    },
+    }
 }
 
 module.exports = foodSuggestion;

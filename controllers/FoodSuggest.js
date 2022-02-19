@@ -1,6 +1,42 @@
+const { TIMESTAMP } = require("mysql/lib/protocol/constants/types");
 const foodSuggestionModel = require("../models/FoodSuggest");
 
 const foodSuggest = {
+    getAllSuggestion: async (req, res) => {
+        let result = await foodSuggestionModel.getAllSuggestion();
+        res.json(result);
+        return;
+    },
+    setSuggestion: async (req, res) => {
+        let dataFromClient = req.body;
+        if(!("data" in dataFromClient)){
+            res.json({
+                "status": "0010",
+                "statusText": "post json lost"
+            })
+            return;
+        }
+        if(dataFromClient.data.length > 10){
+            res.json({
+                "status": "0010",
+                "statusText": "post json lost"
+            })
+            return;
+        }
+        let result;
+        for(var i=0; i<dataFromClient.data.length; i++){
+            result = await foodSuggestionModel.setSuggestion(
+                dataFromClient.data[i].id,
+                dataFromClient.data[i].title,
+                dataFromClient.data[i].suggest
+                );
+            if(result.status!=="0000"){
+                break;
+            }
+        }
+        res.json(result);
+        return;
+    },
     getHighProtein: async (req, res) => {
         res.json(await foodSuggestionModel.getSuggestion(1))
         return;

@@ -16,6 +16,9 @@ app.post('/registerUser', userController.registerUser);
 app.post('/loginUser', userController.loginUser);
 app.post('/loginUserByHash', userController.loginByHash);
 
+app.get('/getAllSuggestion', foodSuggestController.getAllSuggestion);
+app.post('/setSuggestion', foodSuggestController.setSuggestion);
+
 app.get('/getHighProtein', foodSuggestController.getHighProtein);
 app.get('/getLowProtein', foodSuggestController.getLowProtein);
 app.get('/getHighPotassium', foodSuggestController.getHighPotassium);
