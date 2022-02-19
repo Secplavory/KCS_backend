@@ -8,20 +8,23 @@ db_config = {
     database: 'kcs_backend'
 }
 
-var connection;
-
-function handleDisconnected(){
-    connection = mysql.createConnection(db_config);
-    connection.on("error", (err)=>{
-        console.log('db error', err);
+function handleDisconnected(err){
+    if(err){
         if(err.code === "PROTOCOL_CONNECTION_LOST"){
-            handleDisconnected();
+            connect();
         }else{
-            throw err;
+            console.error(err.stack || err);
         }
-    })
+    }
 }
 
-handleDisconnected();
+function connect () {
+    db = mysql.createConnection(db_config);
+    db.connect(handleDisconnected);
+    db.on('error', handleDisconnected);
+}
 
-module.exports = connection;
+var db;
+connect();
+
+module.exports = db;
