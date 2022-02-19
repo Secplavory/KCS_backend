@@ -5,7 +5,7 @@ const foodSuggestion = {
     getSuggestion: async (id) => {
         const query = util.promisify(db.query).bind(db)
         try{
-            const rows = await query("SELECT title, suggest FROM FOODSUGGESTION\
+            const rows = await query("SELECT title, suggest FROM foodsuggestion\
             WHERE id=?", [id])
             return {
                 status: "0000",
@@ -23,7 +23,7 @@ const foodSuggestion = {
     setSuggestion: async (id, title, suggest) => {
         const query = util.promisify(db.query).bind(db)
         try{
-            await query("UPDATE FOODSUGGESTION\
+            await query("UPDATE foodsuggestion\
             SET title=?, suggest=?\
             WHERE id=?", [title,suggest,id])
             return {
