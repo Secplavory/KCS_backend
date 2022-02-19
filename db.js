@@ -20,7 +20,7 @@ function handleDisconnected(err){
 
 function connect () {
     db = mysql.createConnection(db_config);
-    db.connect(handleDisconnected);
+    // db.connect(handleDisconnected);
     db.on('error', handleDisconnected);
 }
 
