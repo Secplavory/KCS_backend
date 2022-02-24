@@ -1,5 +1,4 @@
 const express = require('express');
-const db = require('./db');
 const cors = require('cors');
 
 const userController = require("./controllers/User");
@@ -34,6 +33,5 @@ app.post('/setHighSalt', foodSuggestController.setHighSalt)
 app.post('/setSafe', foodSuggestController.setSafe)
 
 app.listen(port, ()=>{
-    db.connect();
     console.log(`KCS backend listening at port: ${port}`);
 });

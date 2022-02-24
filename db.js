@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+const Connection = require('mysql/lib/Connection');
 
 db_config = {
     host: 'localhost',
@@ -8,23 +9,10 @@ db_config = {
     database: 'kcs_backend'
 }
 
-function handleDisconnected(err){
-    if(err){
-        if(err.code === "PROTOCOL_CONNECTION_LOST"){
-            connect();
-        }else{
-            console.error(err.stack || err);
-        }
+const pool = mysql.createPool(db_config)
+
+module.exports = {
+    getConnection: (callback) => {
+        pool.getConnection(callback)
     }
 }
-
-function connect () {
-    db = mysql.createConnection(db_config);
-    // db.connect(handleDisconnected);
-    db.on('error', handleDisconnected);
-}
-
-var db;
-connect();
-
-module.exports = db;

@@ -2,21 +2,26 @@ const db = require('../db')
 const util = require('util');
 
 const foodSuggestion = {
-    getAllSuggestion: async (id) => {
-        const query = util.promisify(db.query).bind(db)
-        try{
-            const rows = await query("SELECT title, suggest FROM foodsuggestion")
-            return {
-                status: "0000",
-                statusText: "Succeed",
-                data: rows
-            }
-        }catch(err){
-            return {
-                status: "0010",
-                statusText: "DB error"
-            }
-        }
+    getAllSuggestion: async () => {
+        const result = await new Promise((res, rej)=>{
+            db.getConnection(async (err, conn)=>{
+                if(err){
+                    res({
+                        status: "0010",
+                        statusText: "DB error",
+                    })
+                    return;
+                }
+                const query = util.promisify(conn.query).bind(conn)
+                const rows = await query("SELECT title, suggest FROM foodsuggestion")
+                res({
+                    status: "0000",
+                    statusText: "Success",
+                    data: rows,
+                })
+            })
+        })
+        return result
     },
     getSuggestion: async (id) => {
         const query = util.promisify(db.query).bind(db)
