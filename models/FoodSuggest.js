@@ -4,59 +4,63 @@ const util = require('util');
 const foodSuggestion = {
     getAllSuggestion: async () => {
         const result = await new Promise((res, rej)=>{
-            db.getConnection(async (err, conn)=>{
-                if(err){
+            db.getConnection(async (_, conn)=>{
+                try{
+                    const query = util.promisify(conn.query).bind(conn)
+                    const rows = await query("SELECT title, suggest FROM foodsuggestion")
                     res({
-                        status: "0010",
-                        statusText: "DB error",
+                        status: "0000",
+                        statusText: "Success",
+                        data: rows,
                     })
-                    return;
+                }catch(err){
+                    rej(err)
                 }
-                const query = util.promisify(conn.query).bind(conn)
-                const rows = await query("SELECT title, suggest FROM foodsuggestion")
-                res({
-                    status: "0000",
-                    statusText: "Success",
-                    data: rows,
-                })
+                conn.release();
             })
-        })
+        }).catch((err)=>{console.error(err)})
         return result
     },
     getSuggestion: async (id) => {
-        const query = util.promisify(db.query).bind(db)
-        try{
-            const rows = await query("SELECT title, suggest FROM foodsuggestion\
-            WHERE id=?", [id])
-            return {
-                status: "0000",
-                statusText: "Succeed",
-                title: rows[0],
-                suggest: rows[1]
-            }
-        }catch(err){
-            return {
-                status: "0010",
-                statusText: "DB error"
-            }
-        }
+        const result = await new Promise((res, rej)=>{
+            db.getConnection(async (_, conn)=>{
+                try{
+                    const query = util.promisify(conn.query).bind(conn)
+                    const rows = await query("SELECT title, suggest FROM foodsuggestion\
+                    WHERE id=?", [id])
+                    res({
+                        status: "0000",
+                        statusText: "Succeed",
+                        title: rows[0],
+                        suggest: rows[1],
+                    })
+                }catch(err){
+                    rej(err)
+                }
+                conn.release();
+            })
+        }).catch((err)=>{console.error(err)})
+        return result;
     },
     setSuggestion: async (id, title, suggest) => {
-        const query = util.promisify(db.query).bind(db)
-        try{
-            await query("UPDATE foodsuggestion\
-            SET title=?, suggest=?\
-            WHERE id=?", [title,suggest,id])
-            return {
-                status: "0000",
-                statusText: "Succeed",
-            }
-        }catch(err){
-            return {
-                status: "0010",
-                statusText: "DB error",
-            }
-        }
+        const result = await new Promise((res, rej)=>{
+            db.getConnection(async (_, conn)=>{
+                try{
+                    const query = util.promisify(conn.query).bind(conn)
+                    await query("UPDATE foodsuggestion\
+                    SET title=?, suggest=?\
+                    WHERE id=?", [title,suggest,id])
+                    res({
+                        status: "0000",
+                        statusText: "Succeed"
+                    })
+                }catch(err){
+                    rej(err)
+                }
+                conn.release();
+            })
+        }).catch((err)=>{console.error(err)})
+        return result
     }
 }
 

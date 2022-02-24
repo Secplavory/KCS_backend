@@ -3,7 +3,8 @@ const cors = require('cors');
 
 const userController = require("./controllers/User");
 const foodSuggestController = require("./controllers/FoodSuggest")
-global.userHashPair = {}
+
+global.usersHashPair = {}
 
 const port = 3000;
 const app = express();

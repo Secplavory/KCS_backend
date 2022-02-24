@@ -1,4 +1,3 @@
-const { TIMESTAMP } = require("mysql/lib/protocol/constants/types");
 const foodSuggestionModel = require("../models/FoodSuggest");
 
 const foodSuggest = {
@@ -29,8 +28,8 @@ const foodSuggest = {
                 dataFromClient.data[i].id,
                 dataFromClient.data[i].title,
                 dataFromClient.data[i].suggest
-                );
-            if(result.status!=="0000"){
+            );
+            if(result===undefined){
                 break;
             }
         }
