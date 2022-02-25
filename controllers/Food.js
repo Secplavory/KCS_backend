@@ -1,23 +1,29 @@
 const foodModel = require("../models/Food")
 
-function getGetFetchScope(){
-
-    return page, limit, offset
+async function getFetchScope(req){
+    const dataFromClient = req.body
+    let limit; let offset;
+    page = parseInt(dataFromClient.page)
+    limit = parseInt(dataFromClient.limit)
+    offset = (page-1)*limit
+    return {
+        limit: limit,
+        offset, offset,
+    }
 }
 
 const food = {
     getFoodList:async (req, res) => {
-        const dataFromClient = req.body;
-        let page;
-        let limit;
+        let limit; let offset;
         try{
-            page = parseInt(dataFromClient.page);
-            limit = parseInt(dataFromClient.limit);
+           let result = await getFetchScope(req);
+           limit = result.limit
+           offset = result.offset
         }catch(err){
-            res.json({
+            return{
                 status: "0010",
-                statusText: "post data lost"
-            })
+                statusText: "json data lost"
+            }
         }
         if(limit > 20){
             res.json({
@@ -25,20 +31,54 @@ const food = {
                 statusText: "post data lost"
             })
         }
-        let offset = (page-1)*limit
-        if("foodName" in dataFromClient){
-            let foodName = "%"+dataFromClient.foodName+"%"
-            const result = await foodModel.getFoodListByName(foodName, offset, limit)
-            res.json(result)
-            return;
-        }
-        if("foodTag" in dataFromClient){
-            const result = await foodModel.getFoodListByType(dataFromClient.foodTag, offset, limit)
-            res.json(result)
-            return;
-        }
-        const result = await foodModel.getFoodList(offset, limit);
+        const result = await foodModel.getFoodList(offset, limit)
         res.json(result);
+        return;
+    },
+    getFoodListByName: async (req, res)=>{
+        let limit; let offset;
+        try{
+            let result = await getFetchScope(req);
+            limit = result.limit
+            offset = result.offset
+        }catch(err){
+            return{
+                status: "0010",
+                statusText: "DB error"
+            }
+        }
+        if(limit > 20){
+            res.json({
+                status: "0010",
+                statusText: "post data lost"
+            })
+        }
+        let foodName = "%"+req.body.foodName+"%"
+        const result = await foodModel.getFoodListByName(foodName, offset, limit)
+        res.json(result)
+        return;
+
+    },
+    getFoodListByTag: async (req, res)=>{
+        let limit; let offset;
+        try{
+            let result = await getFetchScope(req);
+            limit = result.limit
+            offset = result.offset
+        }catch(err){
+            return{
+                status: "0010",
+                statusText: "DB error"
+            }
+        }
+        if(limit > 20){
+            res.json({
+                status: "0010",
+                statusText: "post data lost"
+            })
+        }
+        const result = await foodModel.getFoodListByType(req.body.foodTag, offset, limit)
+        res.json(result)
         return;
     }
 }

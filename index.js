@@ -35,6 +35,8 @@ app.post('/setHighSalt', foodSuggestController.setHighSalt)
 app.post('/setSafe', foodSuggestController.setSafe)
 
 app.get('/getFoodList', foodController.getFoodList)
+app.get('/getFoodListByName', foodController.getFoodListByName)
+app.get('/getFoodListByTag', foodController.getFoodListByTag)
 
 app.listen(port, ()=>{
     console.log(`KCS backend listening at port: ${port}`);
