@@ -1,6 +1,5 @@
 const userModel = require("../models/User");
 const crypto = require('crypto');
-const userHashPair = require("../index").userHashPair
 
 const userController = {
     getAllUser: async (req, res) => {

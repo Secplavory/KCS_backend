@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const userController = require("./controllers/User");
 const foodSuggestController = require("./controllers/FoodSuggest")
+const foodController = require("./controllers/Food")
 
 global.usersHashPair = {}
 
@@ -32,6 +33,8 @@ app.post('/setHighPotassium', foodSuggestController.setHighPotassium)
 app.post('/setHighPhosphorus', foodSuggestController.setHighPhosphorus)
 app.post('/setHighSalt', foodSuggestController.setHighSalt)
 app.post('/setSafe', foodSuggestController.setSafe)
+
+app.get('/getFoodList', foodController.getFoodList)
 
 app.listen(port, ()=>{
     console.log(`KCS backend listening at port: ${port}`);
