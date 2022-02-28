@@ -1,7 +1,7 @@
 const foodModel = require("../models/Food")
 
 async function getFetchScope(req){
-    const dataFromClient = req.body
+    const dataFromClient = req.query
     let limit; let offset;
     page = parseInt(dataFromClient.page)
     limit = parseInt(dataFromClient.limit)
@@ -53,7 +53,7 @@ const food = {
                 statusText: "post data lost"
             })
         }
-        let foodName = "%"+req.body.foodName+"%"
+        let foodName = "%"+req.query.foodName+"%"
         const result = await foodModel.getFoodListByName(foodName, offset, limit)
         res.json(result)
         return;
@@ -77,7 +77,7 @@ const food = {
                 statusText: "post data lost"
             })
         }
-        const result = await foodModel.getFoodListByType(req.body.foodTag, offset, limit)
+        const result = await foodModel.getFoodListByType(req.query.foodTag, offset, limit)
         res.json(result)
         return;
     }
