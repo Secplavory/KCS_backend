@@ -39,5 +39,5 @@ app.get('/getFoodListByName', foodController.getFoodListByName)
 app.get('/getFoodListByTag', foodController.getFoodListByTag)
 
 app.listen(port, ()=>{
-    console.log(`KCS backend listening at port: ${port}`);
+    console.log(`KCS backend listening at http://localhost:${port}`);
 });

@@ -4,7 +4,9 @@
   "description": "kcs backend api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tar.exe -a -c -f kcs_backend.zip controllers models db.js index.js package-lock.json package.json"
   },
   "repository": {
     "type": "git",
