@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
-const userController = require("./controllers/User");
-const foodSuggestController = require("./controllers/FoodSuggest")
-const foodController = require("./controllers/Food")
+const UserController = require("./controllers/User");
+const FoodSuggestController = require("./controllers/FoodSuggest")
+const FoodController = require("./controllers/Food");
+const HealthInfo = require('./controllers/HealthInfo');
 
 global.usersHashPair = {}
 
@@ -12,31 +13,33 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
-app.get('/getAllUser', userController.getAllUser);
-app.post('/registerUser', userController.registerUser);
-app.post('/loginUser', userController.loginUser);
-app.post('/loginUserByHash', userController.loginByHash);
+app.get('/getAllUser', UserController.getAllUser);
+app.post('/registerUser', UserController.registerUser);
+app.post('/loginUser', UserController.loginUser);
+app.post('/loginUserByHash', UserController.loginByHash);
 
-app.get('/getAllSuggestion', foodSuggestController.getAllSuggestion);
-app.post('/setSuggestion', foodSuggestController.setSuggestion);
+app.get('/getAllSuggestion', FoodSuggestController.getAllSuggestion);
+app.post('/setSuggestion', FoodSuggestController.setSuggestion);
 
-app.get('/getHighProtein', foodSuggestController.getHighProtein);
-app.get('/getLowProtein', foodSuggestController.getLowProtein);
-app.get('/getHighPotassium', foodSuggestController.getHighPotassium);
-app.get('/getHighPhosphorus', foodSuggestController.getHighPhosphorus);
-app.get('/getHighSalt', foodSuggestController.getHighSalt);
-app.get('/getSafe', foodSuggestController.getSafe);
+app.get('/getHighProtein', FoodSuggestController.getHighProtein);
+app.get('/getLowProtein', FoodSuggestController.getLowProtein);
+app.get('/getHighPotassium', FoodSuggestController.getHighPotassium);
+app.get('/getHighPhosphorus', FoodSuggestController.getHighPhosphorus);
+app.get('/getHighSalt', FoodSuggestController.getHighSalt);
+app.get('/getSafe', FoodSuggestController.getSafe);
 
-app.post('/setHighProtein', foodSuggestController.setHighProtein)
-app.post('/setLowProtein', foodSuggestController.setLowProtein)
-app.post('/setHighPotassium', foodSuggestController.setHighPotassium)
-app.post('/setHighPhosphorus', foodSuggestController.setHighPhosphorus)
-app.post('/setHighSalt', foodSuggestController.setHighSalt)
-app.post('/setSafe', foodSuggestController.setSafe)
+app.post('/setHighProtein', FoodSuggestController.setHighProtein)
+app.post('/setLowProtein', FoodSuggestController.setLowProtein)
+app.post('/setHighPotassium', FoodSuggestController.setHighPotassium)
+app.post('/setHighPhosphorus', FoodSuggestController.setHighPhosphorus)
+app.post('/setHighSalt', FoodSuggestController.setHighSalt)
+app.post('/setSafe', FoodSuggestController.setSafe)
 
-app.get('/getFoodList', foodController.getFoodList)
-app.get('/getFoodListByName', foodController.getFoodListByName)
-app.get('/getFoodListByTag', foodController.getFoodListByTag)
+app.get('/getFoodList', FoodController.getFoodList)
+app.get('/getFoodListByName', FoodController.getFoodListByName)
+app.get('/getFoodListByTag', FoodController.getFoodListByTag)
+
+app.get('/getHealthInformation', HealthInfo.getAllInfo)
 
 app.listen(port, ()=>{
     console.log(`KCS backend listening at http://localhost:${port}`);
