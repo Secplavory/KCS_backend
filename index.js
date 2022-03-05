@@ -42,7 +42,7 @@ app.get('/getFoodListByTag', FoodController.getFoodListByTag)
 app.get('/getHealthInformation', HealthInfo.getAllInfo)
 
 app.post('/createHealthInformation', HealthInfo.createInfo)
-app.post('/modifyHealthInformation', HealthInfo.modifyInfo)
+app.post('/updateHealthInformation', HealthInfo.updateInfo)
 app.post('/deleteHealthInformation', HealthInfo.deleteInfo)
 
 

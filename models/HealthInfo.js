@@ -1,5 +1,6 @@
 const db = require('../db')
 const util = require('util');
+const res = require('express/lib/response');
 
 const HealthInfo = {
     getHealthInfoList: async () => {
@@ -57,6 +58,33 @@ const HealthInfo = {
             })
         }).catch((err)=>{console.error(err)})
         return result
+    },
+    updateHealthInfo: async (valueList) => {
+        const result = await new Promise((res, rej) => {
+            db.getConnection(async (_, conn)=>{
+                try{
+                    const query = util.promisify(conn.query).bind(conn)
+                    await query(`\
+                    INSERT INTO healthinfo\
+                    (id, title, brief_desc, notification, imgsrc, full_desc)\
+                    VALUES ${valueList}\
+                    ON DUPLICATE KEY UPDATE\
+                    title = VALUES(title),\
+                    brief_desc = VALUES(brief_desc),\
+                    notification = VALUES(notification),\
+                    imgsrc = VALUES(imgsrc),\
+                    full_desc = VALUES(full_desc)\
+                    `)
+                    res({
+                        status: "0000",
+                        statusText: "Success",
+                    })
+                }catch(err){
+                    rej(err)
+                }
+            })
+        }).catch((err)=>{console.error(err)})
+        return result;
     }
 }
 
