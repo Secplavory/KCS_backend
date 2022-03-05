@@ -1,11 +1,6 @@
 const db = require('../db')
 const util = require('util');
 
-const getChildrenListById = () => {
-
-}
-
-
 const HealthInfo = {
     getHealthInfoList: async () => {
         const result = await new Promise((res, rej)=>{
@@ -38,6 +33,27 @@ const HealthInfo = {
                     rej(err)
                 }
                 conn.release();
+            })
+        }).catch((err)=>{console.error(err)})
+        return result
+    },
+    createHealthInfo: async (valueList) => {
+        const result = await new Promise((res, rej)=>{
+            db.getConnection(async (_, conn)=>{
+                try{
+                    const query = util.promisify(conn.query).bind(conn)
+                    await query(`\
+                    INSERT INTO healthinfo\
+                    (title, brief_desc, notification, imgsrc, full_desc)\
+                    VALUES ${valueList}\
+                    `)
+                    res({
+                        status: "0000",
+                        statusText: "Success",
+                    })
+                }catch(err){
+                    rej(err)
+                }
             })
         }).catch((err)=>{console.error(err)})
         return result

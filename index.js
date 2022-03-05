@@ -41,6 +41,11 @@ app.get('/getFoodListByTag', FoodController.getFoodListByTag)
 
 app.get('/getHealthInformation', HealthInfo.getAllInfo)
 
+app.post('/createHealthInformation', HealthInfo.createInfo)
+app.post('/modifyHealthInformation', HealthInfo.modifyInfo)
+app.post('/deleteHealthInformation', HealthInfo.deleteInfo)
+
+
 app.listen(port, ()=>{
     console.log(`KCS backend listening at http://localhost:${port}`);
 });
