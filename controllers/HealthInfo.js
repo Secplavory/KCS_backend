@@ -1,6 +1,6 @@
 const HealthInfoModel = require("../models/HealthInfo");
 
-const insertValueStructor = (data)=>{
+const insertHealthinfoStructor = (data)=>{
     let valueList = ""
     data.forEach((ele, index) => {
         let id = ele.id
@@ -28,6 +28,39 @@ const insertValueStructor = (data)=>{
     return valueList
 }
 
+const isnertHealthinfoRelationsStructor = (data)=>{
+    let valueList = ""
+    data.forEach((ele, index)=>{
+        if(index!==0){
+            valueList += ","
+        }
+        valueList += "("
+        if(ele.id!==undefined){
+            valueList += `'${ele.id}',`
+        }
+        valueList += 
+        `
+        '${ele.healthinfoid}',
+        '${ele.healthinfolistid}',
+        '${ele.sorted}'
+        `
+        valueList += ")"
+    })
+    return valueList;
+}
+
+const deleteValueStructor = (data)=>{
+    let valueList = "("
+    data.forEach((ele, index)=>{
+        if(index!==0){
+            valueList += ","
+        }
+        valueList += `'${ele.id}'`
+    })
+    valueList += ")"
+    return valueList
+}
+
 const HealthInfo = {
     getAllInfo: async (req, res) => {
         res.json(await HealthInfoModel.getHealthInfoList());
@@ -36,23 +69,43 @@ const HealthInfo = {
     createInfo: async (req, res) => {
         const dataFromClient = req.body;
         const data = dataFromClient.data;
-        let valueList = insertValueStructor(data);
+        let valueList = insertHealthinfoStructor(data);
         res.json(await HealthInfoModel.createHealthInfo(valueList));
         return;
     },
     updateInfo: async (req, res) => {
         const dataFromClient = req.body;
         const data = dataFromClient.data;
-        let valueList = insertValueStructor(data);
+        let valueList = insertHealthinfoStructor(data);
         res.json(await HealthInfoModel.updateHealthInfo(valueList));
         return;
     },
     deleteInfo: async (req, res) => {
-        // const dataFromClient = req.body;
-        res.json({
-            status: "0010",
-            statsuText: "安全考量先不開發"
-        })
+        const dataFromClient = req.body;
+        const data = dataFromClient.data;
+        const valueList = deleteValueStructor(data);
+        res.json(await HealthInfoModel.deleteHealthInfo(valueList))
+        return;
+    },
+    createInfoRelations: async (req, res) => {
+        const dataFromClient = req.body;
+        const data = dataFromClient.data;
+        const valueList = isnertHealthinfoRelationsStructor(data)
+        res.json(await HealthInfoModel.createInfoRelations(valueList));
+        return;
+    },
+    updateInfoRelations: async (req, res) => {
+        const dataFromClient = req.body;
+        const data = dataFromClient.data;
+        let valueList = isnertHealthinfoRelationsStructor(data);
+        res.json(await HealthInfoModel.updateInfoRelations(valueList));
+        return;
+    },
+    deleteInfoRelations: async (req, res) => {
+        const dataFromClient = req.body;
+        const data = dataFromClient.data;
+        const valueList = deleteValueStructor(data);
+        res.json(await HealthInfoModel.deleteInfoRelations(valueList));
         return;
     }
 }

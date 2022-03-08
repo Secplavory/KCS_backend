@@ -38,12 +38,18 @@ app.post('/setSafe', FoodSuggestController.setSafe)
 app.get('/getFoodList', FoodController.getFoodList)
 app.get('/getFoodListByName', FoodController.getFoodListByName)
 app.get('/getFoodListByTag', FoodController.getFoodListByTag)
+app.post('/createFood', FoodController.createFood)
+app.post('/updateFood', FoodController.updateFood)
+app.post('/deleteFood', FoodController.deleteFood)
 
 app.get('/getHealthInformation', HealthInfo.getAllInfo)
-
 app.post('/createHealthInformation', HealthInfo.createInfo)
 app.post('/updateHealthInformation', HealthInfo.updateInfo)
 app.post('/deleteHealthInformation', HealthInfo.deleteInfo)
+app.post('/createHealthInformationRelations', HealthInfo.createInfoRelations)
+app.post('/updateHealthInformationRelations', HealthInfo.updateInfoRelations)
+app.post('/deleteHealthInformationRelations', HealthInfo.deleteInfoRelations)
+
 
 
 app.listen(port, ()=>{
