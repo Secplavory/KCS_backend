@@ -8,7 +8,7 @@ const insertHealthinfoStructor = (data)=>{
         let brief_desc = ele.brief_desc
         let notification = ele.notification
         let imgsrc = ele.imgsrc
-        let full_desc = ele.full_desc
+        let full_desc = ele.full_desc.replace(/\n/g, '\r')
         if(index!==0){
             valueList += ","
         }

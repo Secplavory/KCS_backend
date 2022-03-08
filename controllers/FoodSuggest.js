@@ -27,7 +27,7 @@ const foodSuggest = {
             result = await foodSuggestionModel.setSuggestion(
                 dataFromClient.data[i].id,
                 dataFromClient.data[i].title,
-                dataFromClient.data[i].suggest
+                dataFromClient.data[i].suggest.replace(/\n/g, '\r')
             );
             if(result===undefined){
                 break;
