@@ -1,79 +1,91 @@
-const db = require('../db')
+const db = require('../db');
 const util = require('util');
 
 const food = {
-    getFoodList: async (offset, limit) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    const rows = await query(
-                        "SELECT * FROM food \
+  getFoodList: async (offset, limit) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT * FROM food \
                         WHERE foodId >= (SELECT foodId FROM food limit ?, 1)\
-                        limit ?", [offset, limit])
-                    res({
-                        status: "0000",
-                        statusText: "Succeed",
-                        data: rows
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    },
-    getFoodListByType: async (foodTag, offset, limit) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    const rows = await query(
-                        "SELECT * FROM food \
+                        limit ?',
+            [offset, limit]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+            data: rows,
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getFoodListByType: async (foodTag, offset, limit) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT * FROM food \
                         WHERE foodTag=? and foodId >= (SELECT foodId FROM food WHERE foodTag=? limit ?, 1)\
-                        limit ?", [foodTag, foodTag, offset, limit])
-                    res({
-                        status: "0000",
-                        statusText: "Succeed",
-                        data: rows
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    },
-    getFoodListByName: async (foodName, offset, limit) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    const rows = await query(
-                        "SELECT * FROM food \
+                        limit ?',
+            [foodTag, foodTag, offset, limit]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+            data: rows,
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getFoodListByName: async (foodName, offset, limit) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT * FROM food \
                         WHERE foodName like ? and foodId >= (SELECT foodId FROM food WHERE foodName like ? limit ?, 1)\
-                        limit ?", [foodName, foodName, offset, limit])
-                    res({
-                        status: "0000",
-                        statusText: "Succeed",
-                        data: rows
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    },
-    createFood: async (valueList) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    await query(`
+                        limit ?',
+            [foodName, foodName, offset, limit]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+            data: rows,
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  createFood: async (valueList) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(`
                     INSERT INTO food
                     (
                         foodName, foodTag,
@@ -83,25 +95,27 @@ const food = {
                     )\
                     VALUES
                     ${valueList}
-                    `)
-                    res({
-                        status: "0000",
-                        statusText: "Succeed"
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    },
-    updateFood: async (valueList) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    await query(`
+                    `);
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  updateFood: async (valueList) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(`
                     INSERT INTO food
                     (
                         foodId,
@@ -121,39 +135,43 @@ const food = {
                     foodKa = VALUES(foodKa),
                     foodP = VALUES(foodP),
                     foodCarbohydrate = VALUES(foodCarbohydrate)
-                    `)
-                    res({
-                        status: "0000",
-                        statusText: "Succeed"
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    },
-    deleteFood: async (valueList) => {
-        const result = await new Promise((res, rej)=>{
-            db.getConnection(async (_, conn)=>{
-                try{
-                    const query = util.promisify(conn.query).bind(conn)
-                    await query(`
+                    `);
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  deleteFood: async (valueList) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(`
                     DELETE FROM food WHERE foodId IN ${valueList}
-                    `)
-                    res({
-                        status: "0000",
-                        statusText: "Succeed"
-                    })
-                }catch(err){
-                    rej(err)
-                }
-                conn.release();
-            })
-        }).catch((err)=>{console.error(err)})
-        return result
-    }
-}
+                    `);
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+};
 
 module.exports = food;
