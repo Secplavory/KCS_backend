@@ -5,8 +5,10 @@ const UserController = require('./controllers/User');
 const FoodSuggestController = require('./controllers/FoodSuggest');
 const FoodController = require('./controllers/Food');
 const HealthInfo = require('./controllers/HealthInfo');
+const AutoReply = require('./controllers/AutoReply');
 
 global.usersHashPair = {};
+global.lineState = [];
 
 const port = 3000;
 const app = express();
@@ -50,9 +52,17 @@ app.post('/createHealthInformationRelations', HealthInfo.createInfoRelations);
 app.post('/updateHealthInformationRelations', HealthInfo.updateInfoRelations);
 app.post('/deleteHealthInformationRelations', HealthInfo.deleteInfoRelations);
 
-// app.get('/line-login', UserController.lineLoginCallback);
-app.get('/line-login', UserController.lineLoginGetState);
-app.post('/line-login', UserController.lineLoginPostState);
+app.get('/lineLogin', UserController.lineLogin);
+app.get('/getLinebotParameters', UserController.getLinebotParameters);
+
+app.get('/getAllAutoReply', AutoReply.getAll);
+app.get('/getAutoReplyByKey', AutoReply.getReplyByKey);
+app.post('/autoReplyCreate', AutoReply.createReply);
+app.post('/autoReplyUpdate', AutoReply.updateReply);
+app.post('/autoReplyDelete', AutoReply.deleteReply);
+app.post('/autoReplyContentCreate', AutoReply.createReplyContent);
+app.post('/autoReplyContentUpdate', AutoReply.updateReplyContent);
+app.post('/autoReplyContentDelete', AutoReply.deleteReplyContent);
 
 app.listen(port, () => {
   console.log(`KCS backend listening at http://localhost:${port}`);
