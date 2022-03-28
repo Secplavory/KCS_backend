@@ -1,6 +1,5 @@
 const db = require('../db');
 const util = require('util');
-const res = require('express/lib/response');
 
 const HealthInfo = {
   getHealthInfoList: async () => {
