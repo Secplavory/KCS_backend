@@ -23,8 +23,8 @@ const Heatmap = {
   updateSearchtime: async (req, res) => {
     const dataFromClient = req.body;
     const lineID = dataFromClient.lineId;
-    const foodId = dataFromClient.foodId;
-    const result = await HeatmapModel.updateSearchtime(lineID, foodId);
+    const foodName = dataFromClient.foodName;
+    const result = await HeatmapModel.updateSearchtime(lineID, foodName);
     res.json(result);
   },
 };
