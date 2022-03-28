@@ -16,7 +16,7 @@ const Heatmap = {
               left join user__food as uf on ufd.user_food_id = uf.id
               left join food as f on f.foodId = uf.food_id
               left join users as u on uf.user_id = u.id
-              where u.id = ? AND ufd.date >= current_date-?
+              where u.line_id = ? AND ufd.date >= current_date-?
               group by ufd.user_food_id
             `,
             [lineID, traceBackDate]
@@ -50,7 +50,7 @@ const Heatmap = {
               left join user__food as uf on ufd.user_food_id = uf.id
               left join food as f on f.foodId = uf.food_id
               left join users as u on uf.user_id = u.id
-              where u.id = ?
+              where u.line_id = ?
               group by ufd.user_food_id
             `,
             [lineID]
@@ -150,19 +150,19 @@ const Heatmap = {
           );
           await query(
             `INSERT IGNORE INTO user__food (user_id, food_id) VALUES (?, ?)`,
-            [insertUserId, foodId]
+            [insertUserId[0].id, foodId]
           );
           const insertUser__foodId = await query(
             `SELECT id FROM user__food WHERE user_id=? AND food_id=?`,
-            [insertUserId, foodId]
+            [insertUserId[0].id, foodId]
           );
           await query(
             `INSERT IGNORE INTO user__food__date (user_food_id, times, date) VALUES (?, 0,  CURRENT_DATE)`,
-            [insertUser__foodId]
+            [insertUser__foodId[0].id]
           );
           await query(
             `UPDATE user__food__date SET times = (times+1) WHERE user_food_id = ?`,
-            [insertUser__foodId]
+            [insertUser__foodId[0].id]
           );
           res({
             status: '0000',

@@ -3,7 +3,7 @@ const HeatmapModel = require('../models/Heatmap');
 const Heatmap = {
   getHeatmapProps: async (req, res) => {
     const dataFromClient = req.query;
-    const lineID = dataFromClient.lineID;
+    const lineID = dataFromClient.lineId;
     const traceBackDate = dataFromClient.traceBackDate;
     let result;
     if (lineID && traceBackDate) {
@@ -22,7 +22,7 @@ const Heatmap = {
   },
   updateSearchtime: async (req, res) => {
     const dataFromClient = req.body;
-    const lineID = dataFromClient.lineID;
+    const lineID = dataFromClient.lineId;
     const foodId = dataFromClient.foodId;
     const result = await HeatmapModel.updateSearchtime(lineID, foodId);
     res.json(result);
