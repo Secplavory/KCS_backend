@@ -6,6 +6,7 @@ const FoodSuggestController = require('./controllers/FoodSuggest');
 const FoodController = require('./controllers/Food');
 const HealthInfo = require('./controllers/HealthInfo');
 const AutoReply = require('./controllers/AutoReply');
+const Heatmap = require('./controllers/Heatmap');
 
 global.usersHashPair = {};
 global.lineState = [];
@@ -63,6 +64,9 @@ app.post('/autoReplyDelete', AutoReply.deleteReply);
 app.post('/autoReplyContentCreate', AutoReply.createReplyContent);
 app.post('/autoReplyContentUpdate', AutoReply.updateReplyContent);
 app.post('/autoReplyContentDelete', AutoReply.deleteReplyContent);
+
+app.get('/getHeatmapProps', Heatmap.getHeatmapProps);
+app.post('/updateSearchtime', Heatmap.updateSearchtime);
 
 app.listen(port, () => {
   console.log(`KCS backend listening at http://localhost:${port}`);
