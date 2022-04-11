@@ -50,7 +50,7 @@ const Heatmap = {
               left join user__food as uf on ufd.user_food_id = uf.id
               left join food as f on f.foodId = uf.food_id
               left join users as u on uf.user_id = u.id
-              where u.line_id = ? AND ufd.date >= current_date-?
+              where u.line_id = ? AND ufd.date >= current_date - INTERVAL ? DAY
               group by ufd.user_food_id
             `,
             [lineID, traceBackDate]
@@ -119,8 +119,8 @@ const Heatmap = {
               left join user__food as uf on ufd.user_food_id = uf.id
               left join food as f on f.foodId = uf.food_id
               left join users as u on uf.user_id = u.id
-              where ufd.date >= current_date-?
-              group by ufd.user_food_id
+              where ufd.date >= current_date - INTERVAL ? DAY
+              group by uf.food_id
             `,
             [traceBackDate]
           );
@@ -153,7 +153,7 @@ const Heatmap = {
             left join user__food as uf on ufd.user_food_id = uf.id
             left join food as f on f.foodId = uf.food_id
             left join users as u on uf.user_id = u.id
-            group by ufd.user_food_id
+            group by uf.food_id
             `
           );
           res({
@@ -210,7 +210,7 @@ const Heatmap = {
           await query(
             `UPDATE user__food__date SET times = (times+1) WHERE user_food_id IN ${updateStructure(
               insertUser__foodName
-            )}`
+            )} AND date = ${year + month + date}`
           );
           res({
             status: '0000',

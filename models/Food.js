@@ -106,7 +106,8 @@ const food = {
                         foodName, foodTag,
                         foodKcal, foodProtein,
                         foodNaa, foodKa,
-                        foodP, foodCarbohydrate
+                        foodP, foodCarbohydrate,
+                        isSafe, searchtime
                     )\
                     VALUES
                     ${valueList}
@@ -137,7 +138,8 @@ const food = {
                         foodName, foodTag,
                         foodKcal, foodProtein,
                         foodNaa, foodKa,
-                        foodP, foodCarbohydrate
+                        foodP, foodCarbohydrate,
+                        isSafe, searchtime
                     )
                     VALUES
                     ${valueList}
@@ -149,7 +151,9 @@ const food = {
                     foodNaa = VALUES(foodNaa),
                     foodKa = VALUES(foodKa),
                     foodP = VALUES(foodP),
-                    foodCarbohydrate = VALUES(foodCarbohydrate)
+                    foodCarbohydrate = VALUES(foodCarbohydrate),
+                    isSafe = VALUES(isSafe),
+                    searchtime = VALUES(searchtime)
                     `);
           res({
             status: '0000',

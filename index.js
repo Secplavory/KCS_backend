@@ -53,8 +53,8 @@ app.post('/createHealthInformationRelations', HealthInfo.createInfoRelations);
 app.post('/updateHealthInformationRelations', HealthInfo.updateInfoRelations);
 app.post('/deleteHealthInformationRelations', HealthInfo.deleteInfoRelations);
 
-app.get('/lineLogin', UserController.lineLogin);
-app.get('/getLinebotParameters', UserController.getLinebotParameters);
+// app.get('/lineLogin', UserController.lineLogin);
+// app.get('/getLinebotParameters', UserController.getLinebotParameters);
 
 app.get('/getAllAutoReply', AutoReply.getAll);
 app.get('/getAutoReplyByKey', AutoReply.getReplyByKey);

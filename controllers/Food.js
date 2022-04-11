@@ -26,6 +26,8 @@ async function insertValueStructor(data) {
     let foodKa = ele.foodKa;
     let foodP = ele.foodP;
     let foodCarbohydrate = ele.foodCarbohydrate;
+    let isSafe = ele.isSafe;
+    let searchtime = 0;
 
     if (index !== 0) {
       valueList += ',';
@@ -42,7 +44,9 @@ async function insertValueStructor(data) {
         '${foodNaa}',
         '${foodKa}',
         '${foodP}',
-        '${foodCarbohydrate}'
+        '${foodCarbohydrate}',
+        '${isSafe}',
+        '${searchtime}'
         `;
     valueList += ')';
   });
