@@ -111,6 +111,26 @@ const userController = {
       state: state,
     });
   },
+  getUserBasicInfo: async (req, res) => {
+    const dataFromClient = req.qtatuery;
+    const userId = dataFromClient.userId;
+    // 姓名 性別 年齡 最新血壓 最新血糖 疾病類型
+    const userInfo = await userModel.getUserById(userId);
+    const pressure = await userModel.getPressureByUserId(userId);
+    const sugar = await userModel.getSugarByUserId(userId);
+    const diseaseTypeList = await userModel.getDiseaseType(userId);
+
+    res.json({
+      name: userInfo.name,
+      gender: userInfo.gender,
+      birthday: userInfo.birthday,
+      recentSBP: pressure.sbp,
+      recentDBP: pressure.dbp,
+      recentMAP: pressure.map,
+      recentSugar: sugar.sugar,
+      diseaseTypeList: diseaseTypeList,
+    });
+  },
 };
 
 module.exports = userController;

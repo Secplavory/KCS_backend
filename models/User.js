@@ -114,6 +114,89 @@ const userModel = {
     });
     return result;
   },
+  getUserById: async (userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT name, gender, birthday FROM users WHERE id = ?',
+            [userId]
+          );
+          res(rows[0]);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getPressureByUserId: async (userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT sbp, dbp, map FROM pressure WHERE user_id = ?',
+            [userId]
+          );
+          res(rows[0]);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getSugarByUserId: async (userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            'SELECT sugar FROM sugar WHERE user_id = ?',
+            [userId]
+          );
+          res(rows[0]);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getDiseaseType: async (userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            `
+            SELECT type, color FROM diseasetype
+            WHERE id IN (SELECT diseasetype_id FROM user__diseasetype WHERE user_id = ?)
+            `,
+            [userId]
+          );
+          res(rows);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
 };
 
 module.exports = userModel;
