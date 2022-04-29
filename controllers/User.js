@@ -141,6 +141,17 @@ const userController = {
       twitterList: twitterList,
     });
   },
+  getAllTwitter: async (req, res) => {
+    const dataFromClient = req.query;
+    const page = parseInt(dataFromClient.page);
+    const limit = parseInt(dataFromClient.limit);
+
+    const twitterList = await userModel.getAllTwitter(page, limit);
+
+    res.json({
+      twitterList: twitterList,
+    });
+  },
 };
 
 module.exports = userController;

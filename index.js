@@ -26,10 +26,10 @@ app.post('/loginUserByHash', UserController.loginByHash);
 app.get('/getUserBasicInfo', userController.getUserBasicInfo);
 // 個別推文
 app.get('/getUserTwitter', userController.getUserTwitter);
-
-/*
 // 全部推文 (title查詢)
 app.get('/getAllTwitter', userController.getAllTwitter);
+
+/*
 // 個人全血壓 (時間)
 app.get('/getUserBloodPressure', userController.getUserBloodPressure);
 // 血壓CRUD
