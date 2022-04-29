@@ -131,6 +131,16 @@ const userController = {
       diseaseTypeList: diseaseTypeList,
     });
   },
+  getUserTwitter: async (req, res) => {
+    const dataFromClient = req.query;
+    const userId = dataFromClient.userId;
+    // 個別推文
+    const twitterList = await userModel.getTwitterByUserId(userId);
+
+    res.json({
+      twitterList: twitterList,
+    });
+  },
 };
 
 module.exports = userController;

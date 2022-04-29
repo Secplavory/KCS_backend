@@ -7,6 +7,7 @@ const FoodController = require('./controllers/Food');
 const HealthInfo = require('./controllers/HealthInfo');
 const AutoReply = require('./controllers/AutoReply');
 const Heatmap = require('./controllers/Heatmap');
+const userController = require('./controllers/User');
 
 global.usersHashPair = {};
 global.lineState = [];
@@ -20,6 +21,32 @@ app.get('/getAllUser', UserController.getAllUser);
 app.post('/registerUser', UserController.registerUser);
 app.post('/loginUser', UserController.loginUser);
 app.post('/loginUserByHash', UserController.loginByHash);
+
+// 姓名 性別 年齡 最新血壓 最新血糖 疾病類型
+app.get('/getUserBasicInfo', userController.getUserBasicInfo);
+// 個別推文
+app.get('/getUserTwitter', userController.getUserTwitter);
+
+/*
+// 全部推文 (title查詢)
+app.get('/getAllTwitter', userController.getAllTwitter);
+// 個人全血壓 (時間)
+app.get('/getUserBloodPressure', userController.getUserBloodPressure);
+// 血壓CRUD
+app.post('/bloodPressure', UserController.bloodPressure);
+app.put('/bloodPressure', UserController.bloodPressure);
+app.delete('/bloodPressure', UserController.bloodPressure);
+// 個人全血糖 (時間)
+app.get('/getUserBloodSugar', userController.getUserBloodSugar);
+// 血糖CRUD
+app.post('/bloodSugar', userController.bloodSugar);
+app.put('/bloodSugar', userController.bloodSugar);
+app.delete('/bloodSugar', userController.bloodSugar);
+// 推文CRUD
+app.post('/twitter', userController.twitter);
+app.put('/twitter', userController.twitter);
+app.delete('/twitter', userController.twitter);
+*/
 
 app.get('/getAllSuggestion', FoodSuggestController.getAllSuggestion);
 app.post('/setSuggestion', FoodSuggestController.setSuggestion);
@@ -52,9 +79,6 @@ app.post('/deleteHealthInformation', HealthInfo.deleteInfo);
 app.post('/createHealthInformationRelations', HealthInfo.createInfoRelations);
 app.post('/updateHealthInformationRelations', HealthInfo.updateInfoRelations);
 app.post('/deleteHealthInformationRelations', HealthInfo.deleteInfoRelations);
-
-// app.get('/lineLogin', UserController.lineLogin);
-// app.get('/getLinebotParameters', UserController.getLinebotParameters);
 
 app.get('/getAllAutoReply', AutoReply.getAll);
 app.get('/getAutoReplyByKey', AutoReply.getReplyByKey);

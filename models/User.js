@@ -197,6 +197,31 @@ const userModel = {
     });
     return result;
   },
+  getTwitterByUserId: async (userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            `
+            SELECT title, content, datetime, imagesrc
+            FROM twitter
+            WHERE user_id = ?
+            ORDER BY datetime DESC
+            `,
+            [userId]
+          );
+          res(rows);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
 };
 
 module.exports = userModel;
