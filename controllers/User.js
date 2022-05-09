@@ -146,11 +146,64 @@ const userController = {
     const page = parseInt(dataFromClient.page);
     const limit = parseInt(dataFromClient.limit);
 
-    const twitterList = await userModel.getAllTwitter(page, limit);
+    const twitterList = await userModel.getTwitter(page, limit);
 
     res.json({
       twitterList: twitterList,
     });
+  },
+  getUserBloodPressure: async (req, res) => {
+    const dataFromClient = req.query;
+    const userId = dataFromClient.userId;
+    const page = parseInt(dataFromClient.page);
+    const limit = parseInt(dataFromClient.limit);
+
+    const bloodPressureList = await userModel.getBloodPressure(
+      userId,
+      page,
+      limit
+    );
+
+    res.json({
+      bloodPressureList: bloodPressureList,
+    });
+  },
+  bloodPressure: async (req, res) => {
+    const dataFromClient = req.body;
+    let response = {};
+
+    if (req.method === 'POST') {
+      const sbp = dataFromClient.sbp;
+      const dbp = dataFromClient.dbp;
+      const map = dataFromClient.map;
+      const datetime = dataFromClient.datetime;
+      const userId = dataFromClient.userId;
+      response = await userModel.createBloodPressure(
+        sbp,
+        dbp,
+        map,
+        datetime,
+        userId
+      );
+    } else if (req.method === 'PUT') {
+      const pressureId = dataFromClient.pressureId;
+      const sbp = dataFromClient.sbp;
+      const dbp = dataFromClient.dbp;
+      const map = dataFromClient.map;
+      const datetime = dataFromClient.datetime;
+      response = await userModel.updateBloodPressure(
+        pressureId,
+        sbp,
+        dbp,
+        map,
+        datetime
+      );
+    } else if (req.method === 'DELETE') {
+      const pressureId = dataFromClient.pressureId;
+      response = await userModel.deleteBloodPressure(pressureId);
+    }
+
+    res.json(response);
   },
 };
 

@@ -28,14 +28,14 @@ app.get('/getUserBasicInfo', userController.getUserBasicInfo);
 app.get('/getUserTwitter', userController.getUserTwitter);
 // 全部推文 (title查詢)
 app.get('/getAllTwitter', userController.getAllTwitter);
-
-/*
 // 個人全血壓 (時間)
 app.get('/getUserBloodPressure', userController.getUserBloodPressure);
 // 血壓CRUD
 app.post('/bloodPressure', UserController.bloodPressure);
 app.put('/bloodPressure', UserController.bloodPressure);
 app.delete('/bloodPressure', UserController.bloodPressure);
+
+/*
 // 個人全血糖 (時間)
 app.get('/getUserBloodSugar', userController.getUserBloodSugar);
 // 血糖CRUD

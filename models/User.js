@@ -222,7 +222,7 @@ const userModel = {
     });
     return result;
   },
-  getAllTwitter: async (page, limit) => {
+  getTwitter: async (page, limit) => {
     const result = await new Promise((res, rej) => {
       db.getConnection(async (_, conn) => {
         try {
@@ -237,6 +237,112 @@ const userModel = {
             [limit, (page - 1) * limit]
           );
           res(rows);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getBloodPressure: async (userId, page, limit) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            `
+            SELECT sbp, dbp, map, datetime
+            FROM pressure
+            WHERE user_id = ?
+            ORDER BY datetime DESC
+            LIMIT ? OFFSET ?
+            `,
+            [userId, limit, (page - 1) * limit]
+          );
+          res(rows);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  createBloodPressure: async (sbp, dbp, map, datetime, userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            INSERT INTO pressure
+            (sbp, dbp, map, datetime, user_id)
+            VALUES
+            (?, ?, ?, ?, ?)
+            `,
+            [sbp, dbp, map, datetime, userId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  updateBloodPressure: async (pressureId, sbp, dbp, map, datetime) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            UPDATE pressure
+            SET sbp = ?, dbp = ?, map = ?, datetime = ?
+            WHERE id = ?
+            `,
+            [sbp, dbp, map, datetime, pressureId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  deleteBloodPressure: async (pressureId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            DELETE FROM pressure WHERE id = ?
+            `,
+            [pressureId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
         } catch (err) {
           rej(err);
         }
