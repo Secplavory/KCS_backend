@@ -205,6 +205,39 @@ const userController = {
 
     res.json(response);
   },
+  getUserBloodSugar: async (req, res) => {
+    const dataFromClient = req.query;
+    const userId = dataFromClient.userId;
+    const page = parseInt(dataFromClient.page);
+    const limit = parseInt(dataFromClient.limit);
+
+    const bloodSugarList = await userModel.getBloodSugar(userId, page, limit);
+
+    res.json({
+      bloodSugarList: bloodSugarList,
+    });
+  },
+  bloodSugar: async (req, res) => {
+    const dataFromClient = req.body;
+    let response = {};
+
+    if (req.method === 'POST') {
+      const sugar = dataFromClient.sugar;
+      const datetime = dataFromClient.datetime;
+      const userId = dataFromClient.userId;
+      response = await userModel.createBloodSugar(sugar, datetime, userId);
+    } else if (req.method === 'PUT') {
+      const sugarId = dataFromClient.sugarId;
+      const sugar = dataFromClient.sugar;
+      const datetime = dataFromClient.datetime;
+      response = await userModel.updateBloodSugar(sugarId, sugar, datetime);
+    } else if (req.method === 'DELETE') {
+      const sugarId = dataFromClient.sugarId;
+      response = await userModel.deleteBloodSugar(sugarId);
+    }
+
+    res.json(response);
+  },
 };
 
 module.exports = userController;

@@ -254,7 +254,7 @@ const userModel = {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
             `
-            SELECT sbp, dbp, map, datetime
+            SELECT id as pressureId, sbp, dbp, map, datetime
             FROM pressure
             WHERE user_id = ?
             ORDER BY datetime DESC
@@ -338,6 +338,112 @@ const userModel = {
             DELETE FROM pressure WHERE id = ?
             `,
             [pressureId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  getBloodSugar: async (userId, page, limit) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const rows = await query(
+            `
+            SELECT id as sugarId, sugar, datetime
+            FROM sugar
+            WHERE user_id = ?
+            ORDER BY datetime DESC
+            LIMIT ? OFFSET ?
+            `,
+            [userId, limit, (page - 1) * limit]
+          );
+          res(rows);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  createBloodSugar: async (sugar, datetime, userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            INSERT INTO sugar
+            (sugar, datetime, user_id)
+            VALUES
+            (?, ?, ?)
+            `,
+            [sugar, datetime, userId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  updateBloodSugar: async (sugarId, sugar, datetime) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            UPDATE sugar
+            SET sugar = ?, datetime = ?
+            WHERE id = ?
+            `,
+            [sugar, datetime, sugarId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  deleteBloodSugar: async (sugarId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            DELETE FROM sugar WHERE id = ?
+            `,
+            [sugarId]
           );
           res({
             status: '0000',

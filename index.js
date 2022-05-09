@@ -34,14 +34,14 @@ app.get('/getUserBloodPressure', userController.getUserBloodPressure);
 app.post('/bloodPressure', UserController.bloodPressure);
 app.put('/bloodPressure', UserController.bloodPressure);
 app.delete('/bloodPressure', UserController.bloodPressure);
-
-/*
 // 個人全血糖 (時間)
 app.get('/getUserBloodSugar', userController.getUserBloodSugar);
 // 血糖CRUD
 app.post('/bloodSugar', userController.bloodSugar);
 app.put('/bloodSugar', userController.bloodSugar);
 app.delete('/bloodSugar', userController.bloodSugar);
+
+/*
 // 推文CRUD
 app.post('/twitter', userController.twitter);
 app.put('/twitter', userController.twitter);
