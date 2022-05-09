@@ -1,5 +1,6 @@
 const userModel = require('../models/User');
 const crypto = require('crypto');
+const res = require('express/lib/response');
 
 const userController = {
   getAllUser: async (req, res) => {
@@ -235,6 +236,49 @@ const userController = {
       const sugarId = dataFromClient.sugarId;
       response = await userModel.deleteBloodSugar(sugarId);
     }
+
+    res.json(response);
+  },
+  createTwitter: async (req, res) => {
+    const dataFromClient = req.body;
+    const title = dataFromClient.title;
+    const content = dataFromClient.content;
+    const datetime = dataFromClient.datetime;
+    const imageUrl = dataFromClient.imageUrl;
+    const userId = dataFromClient.userId;
+
+    const response = await userModel.createTwitter(
+      title,
+      content,
+      datetime,
+      imageUrl,
+      userId
+    );
+
+    res.json(response);
+  },
+  updateTwitter: async (req, res) => {
+    const dataFromClient = req.body;
+    const twitterId = dataFromClient.twitterId;
+    const title = dataFromClient.title;
+    const content = dataFromClient.content;
+    const datetime = dataFromClient.datetime;
+    const imageUrl = dataFromClient.imageUrl;
+
+    const response = await userModel.updateTwitter(
+      twitterId,
+      title,
+      content,
+      datetime,
+      imageUrl
+    );
+
+    res.json(response);
+  },
+  deleteTwitter: async (req, res) => {
+    const dataFromClient = req.body;
+    const twitterId = dataFromClient.twitterId;
+    const response = await userModel.deleteTwitter(twitterId);
 
     res.json(response);
   },

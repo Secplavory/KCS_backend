@@ -41,12 +41,10 @@ app.post('/bloodSugar', userController.bloodSugar);
 app.put('/bloodSugar', userController.bloodSugar);
 app.delete('/bloodSugar', userController.bloodSugar);
 
-/*
 // 推文CRUD
-app.post('/twitter', userController.twitter);
-app.put('/twitter', userController.twitter);
-app.delete('/twitter', userController.twitter);
-*/
+app.post('/createTwitter', userController.createTwitter);
+app.put('/updateTwitter', userController.updateTwitter);
+app.delete('/deleteTwitter', userController.deleteTwitter);
 
 app.get('/getAllSuggestion', FoodSuggestController.getAllSuggestion);
 app.post('/setSuggestion', FoodSuggestController.setSuggestion);

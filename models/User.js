@@ -204,7 +204,7 @@ const userModel = {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
             `
-            SELECT title, content, datetime, imagesrc
+            SELECT id as twitterId, title, content, datetime, imagesrc
             FROM twitter
             WHERE user_id = ?
             ORDER BY datetime DESC
@@ -229,7 +229,7 @@ const userModel = {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
             `
-            SELECT title, content, datetime, imagesrc
+            SELECT id as twitterId, title, content, datetime, imagesrc
             FROM twitter
             ORDER BY datetime DESC
             LIMIT ? OFFSET ?
@@ -444,6 +444,86 @@ const userModel = {
             DELETE FROM sugar WHERE id = ?
             `,
             [sugarId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  createTwitter: async (title, content, datetime, imageUrl, userId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            INSERT INTO twitter
+            (title, content, datetime, imagesrc, user_id)
+            VALUES
+            (?, ?, ?, ?, ?)
+            `,
+            [title, content, datetime, imageUrl, userId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  updateTwitter: async (twitterId, title, content, datetime, imageUrl) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            UPDATE twitter
+            SET title=?, content=?, datetime=?, imagesrc=?
+            WHERE id = ?
+            `,
+            [title, content, datetime, imageUrl, twitterId]
+          );
+          res({
+            status: '0000',
+            statusText: 'Succeed',
+          });
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
+  deleteTwitter: async (twitterId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          await query(
+            `
+            DELETE FROM twitter WHERE id = ?
+            `,
+            [twitterId]
           );
           res({
             status: '0000',
