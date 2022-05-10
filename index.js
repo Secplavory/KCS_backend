@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
+const upload = multer();
 
 const UserController = require('./controllers/User');
 const FoodSuggestController = require('./controllers/FoodSuggest');
@@ -7,7 +9,7 @@ const FoodController = require('./controllers/Food');
 const HealthInfo = require('./controllers/HealthInfo');
 const AutoReply = require('./controllers/AutoReply');
 const Heatmap = require('./controllers/Heatmap');
-const userController = require('./controllers/User');
+const ImageController = require('./controllers/Image');
 
 global.usersHashPair = {};
 global.lineState = [];
@@ -23,28 +25,29 @@ app.post('/loginUser', UserController.loginUser);
 app.post('/loginUserByHash', UserController.loginByHash);
 
 // 姓名 性別 年齡 最新血壓 最新血糖 疾病類型
-app.get('/getUserBasicInfo', userController.getUserBasicInfo);
+app.get('/getUserBasicInfo', UserController.getUserBasicInfo);
 // 個別推文
-app.get('/getUserTwitter', userController.getUserTwitter);
+app.get('/getUserTwitter', UserController.getUserTwitter);
 // 全部推文 (title查詢)
-app.get('/getAllTwitter', userController.getAllTwitter);
+app.get('/getAllTwitter', UserController.getAllTwitter);
 // 個人全血壓 (時間)
-app.get('/getUserBloodPressure', userController.getUserBloodPressure);
+app.get('/getUserBloodPressure', UserController.getUserBloodPressure);
 // 血壓CRUD
 app.post('/bloodPressure', UserController.bloodPressure);
 app.put('/bloodPressure', UserController.bloodPressure);
 app.delete('/bloodPressure', UserController.bloodPressure);
 // 個人全血糖 (時間)
-app.get('/getUserBloodSugar', userController.getUserBloodSugar);
+app.get('/getUserBloodSugar', UserController.getUserBloodSugar);
 // 血糖CRUD
-app.post('/bloodSugar', userController.bloodSugar);
-app.put('/bloodSugar', userController.bloodSugar);
-app.delete('/bloodSugar', userController.bloodSugar);
-
+app.post('/bloodSugar', UserController.bloodSugar);
+app.put('/bloodSugar', UserController.bloodSugar);
+app.delete('/bloodSugar', UserController.bloodSugar);
 // 推文CRUD
-app.post('/createTwitter', userController.createTwitter);
-app.put('/updateTwitter', userController.updateTwitter);
-app.delete('/deleteTwitter', userController.deleteTwitter);
+app.post('/createTwitter', UserController.createTwitter);
+app.put('/updateTwitter', UserController.updateTwitter);
+app.delete('/deleteTwitter', UserController.deleteTwitter);
+//上傳圖片
+app.post('/uploadImage', upload.single('image'), ImageController.upload);
 
 app.get('/getAllSuggestion', FoodSuggestController.getAllSuggestion);
 app.post('/setSuggestion', FoodSuggestController.setSuggestion);

@@ -1,6 +1,5 @@
 const userModel = require('../models/User');
 const crypto = require('crypto');
-const res = require('express/lib/response');
 
 const userController = {
   getAllUser: async (req, res) => {
