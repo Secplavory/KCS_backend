@@ -1,7 +1,31 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
-const upload = multer();
+const { v4: uuidv4 } = require('uuid');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + path.extname(file.originalname).toLowerCase());
+  },
+});
+const upload = multer({
+  storage: storage,
+  dest: path.join(__dirname, 'public'),
+  limits: { fileSize: 50000 },
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png|gif/;
+    const mimetype = fileTypes.test(file.mimetype);
+    const extname = fileTypes.test(path.extname(file.originalname));
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb('Error: Image is not validate.');
+  },
+}).single('image');
 
 const UserController = require('./controllers/User');
 const FoodSuggestController = require('./controllers/FoodSuggest');
@@ -47,7 +71,7 @@ app.post('/createTwitter', UserController.createTwitter);
 app.put('/updateTwitter', UserController.updateTwitter);
 app.delete('/deleteTwitter', UserController.deleteTwitter);
 //上傳圖片
-app.post('/uploadImage', upload.single('image'), ImageController.upload);
+app.post('/uploadImage', upload, ImageController.upload);
 
 app.get('/getAllSuggestion', FoodSuggestController.getAllSuggestion);
 app.post('/setSuggestion', FoodSuggestController.setSuggestion);
