@@ -11,7 +11,7 @@ const imageController = {
     res.json({
       status: '0000',
       statusText: 'OK',
-      fileName: req.file.filename,
+      fileName: 'https://kcs-backend.secplavory.page/' + req.file.filename,
     });
   },
 };
