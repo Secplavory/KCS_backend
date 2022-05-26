@@ -128,6 +128,7 @@ const userController = {
       recentDBP: pressure.dbp,
       recentMAP: pressure.map,
       recentSugar: sugar.sugar,
+      recnetSugarPeriod: sugar.timePeriod,
       diseaseTypeList: diseaseTypeList,
     });
   },
@@ -224,13 +225,25 @@ const userController = {
     if (req.method === 'POST') {
       const sugar = dataFromClient.sugar;
       const datetime = dataFromClient.datetime;
+      const time_period = dataFromClient.timePeriod;
       const userId = dataFromClient.userId;
-      response = await userModel.createBloodSugar(sugar, datetime, userId);
+      response = await userModel.createBloodSugar(
+        sugar,
+        datetime,
+        time_period,
+        userId
+      );
     } else if (req.method === 'PUT') {
       const sugarId = dataFromClient.sugarId;
       const sugar = dataFromClient.sugar;
+      const time_period = dataFromClient.timePeriod;
       const datetime = dataFromClient.datetime;
-      response = await userModel.updateBloodSugar(sugarId, sugar, datetime);
+      response = await userModel.updateBloodSugar(
+        sugarId,
+        sugar,
+        datetime,
+        time_period
+      );
     } else if (req.method === 'DELETE') {
       const sugarId = dataFromClient.sugarId;
       response = await userModel.deleteBloodSugar(sugarId);

@@ -140,7 +140,7 @@ const userModel = {
         try {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
-            'SELECT sbp, dbp, map FROM pressure WHERE user_id = ?',
+            'SELECT sbp, dbp, map FROM pressure WHERE user_id = ? ORDER BY datetime DESC limit 1',
             [userId]
           );
           res(rows[0]);
@@ -160,7 +160,7 @@ const userModel = {
         try {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
-            'SELECT sugar FROM sugar WHERE user_id = ?',
+            'SELECT sugar, time_period as timePeriod FROM sugar WHERE user_id = ? ORDER BY datetime DESC limit 1',
             [userId]
           );
           res(rows[0]);
@@ -360,7 +360,7 @@ const userModel = {
           const query = util.promisify(conn.query).bind(conn);
           const rows = await query(
             `
-            SELECT id as sugarId, sugar, datetime
+            SELECT id as sugarId, sugar, datetime, time_period as timePeriod
             FROM sugar
             WHERE user_id = ?
             ORDER BY datetime DESC
@@ -379,7 +379,7 @@ const userModel = {
     });
     return result;
   },
-  createBloodSugar: async (sugar, datetime, userId) => {
+  createBloodSugar: async (sugar, datetime, time_period, userId) => {
     const result = await new Promise((res, rej) => {
       db.getConnection(async (_, conn) => {
         try {
@@ -387,11 +387,11 @@ const userModel = {
           await query(
             `
             INSERT INTO sugar
-            (sugar, datetime, user_id)
+            (sugar, datetime, time_period, user_id)
             VALUES
-            (?, ?, ?)
+            (?, ?, ?, ?)
             `,
-            [sugar, datetime, userId]
+            [sugar, datetime, time_period, userId]
           );
           res({
             status: '0000',
@@ -407,7 +407,7 @@ const userModel = {
     });
     return result;
   },
-  updateBloodSugar: async (sugarId, sugar, datetime) => {
+  updateBloodSugar: async (sugarId, sugar, datetime, time_period) => {
     const result = await new Promise((res, rej) => {
       db.getConnection(async (_, conn) => {
         try {
@@ -415,10 +415,10 @@ const userModel = {
           await query(
             `
             UPDATE sugar
-            SET sugar = ?, datetime = ?
+            SET sugar = ?, datetime = ?, time_period = ?
             WHERE id = ?
             `,
-            [sugar, datetime, sugarId]
+            [sugar, datetime, time_period, sugarId]
           );
           res({
             status: '0000',
