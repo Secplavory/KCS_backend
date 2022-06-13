@@ -247,6 +247,33 @@ const userModel = {
     });
     return result;
   },
+  getTwitterDetailById: async (twitterId) => {
+    const result = await new Promise((res, rej) => {
+      db.getConnection(async (_, conn) => {
+        try {
+          const query = util.promisify(conn.query).bind(conn);
+          const twitterInfo = await query(
+            `
+            SELECT title, content, datetime, imagesrc,
+            (select name from users where id = t.user_id) as userName,
+            (select gender from users where id = t.user_id) as userGender,
+            (select birthDay from users where id = t.user_id) as userBirthday
+            FROM twitter as t
+            WHERE id = ?
+            `,
+            [twitterId]
+          );
+          res(twitterInfo[0]);
+        } catch (err) {
+          rej(err);
+        }
+        conn.release();
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+    return result;
+  },
   getBloodPressure: async (userId, page, limit) => {
     const result = await new Promise((res, rej) => {
       db.getConnection(async (_, conn) => {

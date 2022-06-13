@@ -251,6 +251,12 @@ const userController = {
 
     res.json(response);
   },
+  getTwitterDetail: async (req, res) => {
+    const dataFromClient = req.query;
+    const twitterId = dataFromClient.twitterId;
+    const response = await userModel.getTwitterDetailById(twitterId);
+    res.json(response);
+  },
   createTwitter: async (req, res) => {
     const dataFromClient = req.body;
     const title = dataFromClient.title;

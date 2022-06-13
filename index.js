@@ -67,6 +67,7 @@ app.post('/bloodSugar', UserController.bloodSugar);
 app.put('/bloodSugar', UserController.bloodSugar);
 app.delete('/bloodSugar', UserController.bloodSugar);
 // 推文CRUD
+app.get('/getTwitterDetail', UserController.getTwitterDetail);
 app.post('/createTwitter', UserController.createTwitter);
 app.put('/updateTwitter', UserController.updateTwitter);
 app.delete('/deleteTwitter', UserController.deleteTwitter);
