@@ -7,32 +7,18 @@ const HealthInfo = {
       db.getConnection(async (_, conn) => {
         try {
           const query = util.promisify(conn.query).bind(conn);
-          const rows = await query(`\
-                        SELECT
-                        h.*,
-                        if(h__h.id,
-                        JSON_ARRAYAGG(
-                            JSON_OBJECT(
-                                'id', h__h.id,
-                                'healthinfoid', h__h.healthinfoid,
-                                'healthinfolistid', h__h.healthinfolistid,
-                                'sorted', h__h.sorted,
-                                'title', (SELECT title FROM healthinfo WHERE id = h__h.healthinfolistid)
-                            )
-                        ),
-                        '[]'
-                        ) as children
-                        FROM healthinfo AS h
-                        LEFT JOIN healthinfo__healthinfo AS h__h ON (h.id = h__h.healthinfoid)
-                        GROUP BY h.id
-                    `);
-          rows.forEach((ele) => {
-            ele.children = JSON.parse(ele.children);
-          });
+          const hList = await query(`SELECT * FROM healthinfo`);
+          for (const h of hList) {
+            const children = await query(
+              `SELECT *, (SELECT title FROM healthinfo where id = h_h.healthinfolistid) as title from healthinfo__healthinfo as h_h where healthinfoid = ?`,
+              [h.id]
+            );
+            h.children = children;
+          }
           res({
             status: '0000',
             statusText: 'Succeed',
-            data: rows,
+            data: hList,
           });
         } catch (err) {
           rej(err);

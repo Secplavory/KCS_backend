@@ -7,29 +7,18 @@ const AutoReply = {
       db.getConnection(async (_, conn) => {
         try {
           const query = util.promisify(conn.query).bind(conn);
-          const rows = await query(`
-          SELECT
-          ar.*,
-          if(arc.id,
-            JSON_ARRAYAGG(
-              JSON_OBJECT(
-              'id', arc.id,
-              'keyid', arc.keyid,
-              'content', arc.content
-            )
-          ),
-          '[]') as contentList
-          FROM autoreply AS ar
-          LEFT JOIN autoreplycontent AS arc ON (ar.id = arc.keyid)
-          GROUP BY ar.id
-          `);
-          rows.forEach((ele) => {
-            ele.contentList = JSON.parse(ele.contentList);
-          });
+          const arList = await query(`SELECT * FROM autoreply`);
+          for (const ele of arList) {
+            let contentList = await query(
+              `SELECT id, keyid, content FROM autoreplycontent WHERE keyid = ?`,
+              [ele.id]
+            );
+            ele.contentList = contentList;
+          }
           res({
             status: '0000',
             statusText: 'Succeed',
-            data: rows,
+            data: arList,
           });
         } catch (err) {
           rej(err);
