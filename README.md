@@ -1,2 +1,2 @@
 # KCS_backend
-腎臟病友照護系統
+Kidney Care System backend. Use to communicate Website and linebot.
